@@ -9,8 +9,14 @@ function LoginPage({ onLoginSuccess }) {
   const navigate = useNavigate(); // ← 用來導向頁面
 
   const handleLogin = async () => {
+     // ✅ 新增：前端驗證
+  if (!username.trim() || !password.trim()) {
+    alert("請輸入帳號和密碼");
+    return;
+  }
     try {
-      const result = await login(username, password);
+      const result = await login(username.trim(), password);
+      //const result = await login(username, password);
       alert("登入成功！");
       console.log("登入成功：", result);
       onLoginSuccess();
