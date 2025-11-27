@@ -1,0 +1,28 @@
+.detail-container {
+  display: flex;
+  gap: 25px;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.detail-img {
+  width: 50%;
+  border-radius: 8px;
+}
+
+.detail-info {
+  width: 50%;
+}
+
+.detail-price {
+  font-size: 30px;
+  font-weight: bold;
+  color: #d9534f;
+  margin-top: 10px;
+}
+
+.detail-meta {
+  color: #666;
+  margin-top: 12px;
+}

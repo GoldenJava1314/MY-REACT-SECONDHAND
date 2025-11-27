@@ -1,0 +1,17 @@
+.car-card-container {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.car-image-gallery {
+  flex: 1;
+  max-width: 500px; /* 大圖最大寬度 */
+}
+
+.car-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
