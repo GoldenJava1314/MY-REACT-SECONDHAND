@@ -40,6 +40,8 @@ const handleFileChange = (e) => {
 
     try {
       // 1. 建立 car（後端回傳包含 id）
+
+      console.log("準備上傳的檔案：", files);
       const carData = 
       { brand, 
         model, 
@@ -57,6 +59,9 @@ const handleFileChange = (e) => {
       alert("刊登成功！");
       // reset
       setBrand(""); setModel(""); setYear(""); setMileage(""); setPrice(""); setFiles([]);
+
+     console.log("上傳檔案數量:", files.length, files);
+
     } catch (err) {
   console.error("錯誤：", err);
   alert(err.message);   // 會顯示「未登入」「圖片上傳失敗」等明確訊息
@@ -70,14 +75,14 @@ const handleFileChange = (e) => {
         <label>廠牌<input value={brand} onChange={(e)=>setBrand(e.target.value)} required/></label>
         <label>車款<input value={model} onChange={(e)=>setModel(e.target.value)} required/></label>
         
-     <form className="upload-form">
+     <div className="upload-form">
        <label>年份<input type="number" value={year} onChange={(e)=>setYear(e.target.value)} required/></label>
-     </form>
+     </div>
 
-     <form className="upload-form">
+     <div className="upload-form">
        <label>里程<input type="number" value={mileage} onChange={(e)=>setMileage(e.target.value)} required/></label>
        <label>價格<input type="number" value={price} onChange={(e)=>setPrice(e.target.value)} required/></label>
-     </form>
+     </div>
 
 
       <label className="file-label">

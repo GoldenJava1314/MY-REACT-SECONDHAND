@@ -1,94 +1,89 @@
-/*.navbar {
-  background: white;
-  padding: 12px 20px;
-  border-bottom: 1px solid #e0e0e0;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}*/
+/* 乾淨明亮 Navbar */
 .navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: #333;
-    color: #fff;
-    padding: 15px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 1000; /* 確保 navbar 在最上層 */
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 200px;
 
-.navbar-inner {
+  /* 使用你的背景圖片 */
+  background-image: url("../assets/images/NB.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  z-index: 500;
+  
+
+  /* ❌ 移除任何陰影 */
+  box-shadow: none;
+}
+
+/* 讓 Navbar 內部內容靠左 */
+.navbar-left-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;   /* ⬅️ 左對齊 */
+  align-items: center;
+  padding-left: 20px;            /* ⬅️ 可以調整距離 */
+}
+
+/* 左右布局 */
+.navbar-container {
   max-width: 1200px;
-  margin: auto;
+  margin: 0 auto;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
 }
 
-  .navbar-title {
-    font-size: 1.5em;
-  color: black;
-  background-color: yellow;
-  border: 1px solid red;
-  }
-
-.logo {
-  font-weight: 700;
-  font-size: 20px;
-  color: #333;
+/* Logo（白色會在背景圖上更清楚） */
+.navbar-logo {
+  color: rgb(83, 9, 78);
+  font-size: 24px;
+  font-weight: bold;
   text-decoration: none;
-  margin-right: 30px;
 }
 
-/*.nav-links {
+/* 選單 */
+.navbar-links {
+  list-style: none;
   display: flex;
   gap: 20px;
-}*/
-
- .navbar-links {
-    list-style: none;
-    display: flex;
-    gap: 15px;
-  }
-
-/*.nav-links a {
-  text-decoration: none;
-  color: #444;
-  font-weight: 500;
-}*/
-
-/*.nav-right {
-  display: flex;
-  gap: 16px;
-}*/
-
-/*.nav-right a {
-  text-decoration: none;
-  color: #004fa8;
-  font-weight: 600;
-}*/
-
-.navbar-links {
-    list-style: none;
-    display: flex;
-    gap: 15px;
-  }
-
-   .navbar-links a {
-    color: #fff;
-    text-decoration: none;
-  }
-
-   .navbar-links a:hover {
-    text-decoration: underline;
-  }
-
-.btn-register {
-  background: #ff7700;
-  color: white;
-  padding: 6px 12px;
-  border-radius: 6px;
 }
+
+.navbar-links li a {
+  color: white;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+/* hover 更亮 */
+.navbar-links li a:hover {
+  color: #ffee66;
+}
+
+/* 登出按鈕 */
+.navbar-button {
+  background-color: #ff4444;
+  border: none;
+  padding: 6px 12px;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* 註冊按鈕 */
+.btn-register {
+  background-color: #ffaa00;
+  padding: 6px 12px;
+  border-radius: 4px;
+  color: black;
+  font-weight: bold;
+}
+

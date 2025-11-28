@@ -37,7 +37,7 @@ export async function uploadCar(carData) {
 export async function uploadCarImages(carId, files) {
   const formData = new FormData();
   for (let f of files) {
-    formData.append("images", f);
+      formData.append("images", f); // ✅ 這裡要跟後端 @RequestParam("images") 一樣
   }
 
   const res = await fetch(`${API_BASE_URL}/api/cars/${carId}/images`, {

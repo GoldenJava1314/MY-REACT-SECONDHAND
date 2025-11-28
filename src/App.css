@@ -58,3 +58,8 @@ body {
   padding-top: 100px; /* 確保內容不會被固定的 Navbar 覆蓋 */
   flex: 1;
 }
+
+/* 讓所有主要內容往下推，不會被 fixed navbar 遮到 */
+.app-main-content {
+  padding-top: 200px;  /* ★ 一定要跟 navbar 高度一樣 */
+}

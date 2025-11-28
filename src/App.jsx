@@ -63,7 +63,7 @@ function App() {
     {/* 導航列-位於最上方 */}
      <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
       {/* 主要內容區-位於中間部分 */}
-      <div className='content'>
+      <div className='app-main-content'>
         <Routes>
           {/* 首頁路由 */}
           <Route path="/" element={<Home />} />
