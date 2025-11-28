@@ -11,13 +11,25 @@ function UploadPage() {
   const [price, setPrice] = useState("");
   const [files, setFiles] = useState([]);
 
+const handleFileChange = (e) => {
+  const newFiles = [...files, ...e.target.files];
+
+  if (newFiles.length > 20) {
+    alert("最多只能上傳20張圖片");
+    return;
+  }
+
+  setFiles(newFiles); // 更新檔案陣列
+ };
+
+
   const handleSubmit = async (e) => {
 
     //console.log("送出的 car JSON=", carData); // ★ 放這裡！
 
     e.preventDefault();
 
- /*    const carData = {
+   /*  const carData = {
     brand,
     model,
     year: Number(year),
@@ -28,7 +40,13 @@ function UploadPage() {
 
     try {
       // 1. 建立 car（後端回傳包含 id）
-      const carData = { brand, model, year: parseInt(year), mileage: parseInt(mileage), price: parseFloat(price) };
+      const carData = 
+      { brand, 
+        model, 
+        year: parseInt(year), 
+        mileage: parseInt(mileage), 
+        price: parseFloat(price) 
+      };
       const created = await uploadCar(carData);
 
       // 2. 若有檔案，呼叫 uploadCarImages
@@ -62,10 +80,14 @@ function UploadPage() {
      </form>
 
 
- <label className="file-label">
-        
-          <input type="file" accept="image/*" multiple onChange={(e)=>setFiles([...e.target.files])} />
-        </label>
+      <label className="file-label">
+        <input
+          type="file"
+          accept="image/*"
+          multiple
+          onChange={handleFileChange} // ✅ 這裡換成 handleFileChange
+        />
+      </label>
         <button type="submit" className="submit-btn">刊登車輛</button>
       </form>
 
