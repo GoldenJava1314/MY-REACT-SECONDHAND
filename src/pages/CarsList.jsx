@@ -22,17 +22,20 @@ function CarsList() {
     fetchCars();
   }, []);
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("確定要刪除這台車嗎？")) return;
-    try {
-      await deleteCar(id);
-      setCars(cars.filter(c => c.id !== id)); // 前端立即更新
-      alert("刪除成功");
-    } catch (e) {
-      console.error(e);
-      alert("刪除失敗：" + e.message);
+ const handleDelete = async (id) => {
+  if (!window.confirm("確定要刪除這台車嗎？")) return;
+
+  try {
+    await deleteCar(id);
+    setCars(cars.filter(c => c.id !== id));
+    alert("刪除成功");
+  } catch (e) {
+    alert("刪除失敗：" + e.message);
+    if (e.message.includes("未登入")) {
+      window.location.href = "/login";
     }
-  };
+  }
+};
 
   if (loading) return <div>載入中...</div>;
 
