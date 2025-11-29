@@ -12,15 +12,17 @@ function UploadPage() {
   const [files, setFiles] = useState([]);
 
 const handleFileChange = (e) => {
-  const newFiles = [...files, ...e.target.files];
+  const selected = Array.from(e.target.files).filter(f => f.size > 0);
+
+  const newFiles = [...files, ...selected];
 
   if (newFiles.length > 20) {
     alert("最多只能上傳20張圖片");
     return;
   }
 
-  setFiles(newFiles); // 更新檔案陣列
- };
+  setFiles(newFiles);
+};
 
 
   const handleSubmit = async (e) => {

@@ -69,3 +69,97 @@ body {
   max-width: 800px;
   border-radius: 12px;
 }
+
+/* Grid 容器 */
+.cars-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+/* 每個車輛格子 */
+.car-item {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  position: relative;
+  display: flex;
+  flex-direction: column; /* 卡片內部上下排列 */
+  height: 100%; /* 保持格子高度一致 */
+  box-sizing: border-box;
+  transition: box-shadow 0.2s;
+}
+
+.car-item:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* 刪除按鈕 */
+.delete-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+/* CarCardV2 內部排列 */
+.car-card {
+  display: flex;
+  flex-direction: column; /* 圖片在上，文字在下 */
+  gap: 8px; /* 圖片與資訊間距 */
+}
+
+/* 主要圖片 */
+.car-main-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* 縮圖列 */
+.thumbnail-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.thumbnail {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 2px solid #ccc;
+  cursor: pointer;
+}
+
+.thumbnail:hover {
+  border-color: #444;
+}
+
+/* 車輛文字資訊 */
+.car-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+  color: #333;
+}
+
+.cars-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.car-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}

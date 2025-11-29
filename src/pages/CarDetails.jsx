@@ -7,6 +7,9 @@ function CarDetails() {
   const { id } = useParams();
   const [car, setCar] = useState(null);
   const [mainImage, setMainImage] = useState("");
+  const [favorites, setFavorites] = useState(() => {
+    return JSON.parse(localStorage.getItem("favoriteCars") || "[]");
+  });
 
   useEffect(() => {
     const fetchCar = async () => {
@@ -23,7 +26,21 @@ function CarDetails() {
     fetchCar();
   }, [id]);
 
+  const toggleFavorite = () => {
+    if (!car) return;
+    let updated = [];
+    if (favorites.some(f => f.id === car.id)) {
+      updated = favorites.filter(f => f.id !== car.id);
+    } else {
+      updated = [...favorites, car];
+    }
+    setFavorites(updated);
+    localStorage.setItem("favoriteCars", JSON.stringify(updated));
+  };
+
   if (!car) return <div>載入中...</div>;
+
+  const isFavorite = favorites.some(f => f.id === car.id);
 
   return (
     <div className="car-details-container">
@@ -51,6 +68,21 @@ function CarDetails() {
         <p>年份：{car.year}</p>
         <p>里程：{car.miles} km</p>
         <p>價格：{car.price} 萬</p>
+
+        {/* 關注按鈕 */}
+        <button
+          onClick={toggleFavorite}
+          style={{
+            padding: "8px 12px",
+            backgroundColor: isFavorite ? "#007bff" : "#ccc",
+            color: "white",
+            border: "none",
+            cursor: "pointer",
+            marginTop: "10px"
+          }}
+        >
+          {isFavorite ? "已關注" : "關注"}
+        </button>
       </div>
     </div>
   );

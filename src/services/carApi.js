@@ -50,6 +50,8 @@ export async function uploadCarImages(carId, files) {
 if (!res.ok) {
   throw new Error(data.message || "圖片上傳失敗");
 }
+
+console.log("total size =", [...files].reduce((s, f) => s + f.size, 0));
 return data;
 }
 
