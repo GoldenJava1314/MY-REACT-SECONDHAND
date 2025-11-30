@@ -20,6 +20,7 @@ import RegisterPage from "./pages/RegisterPage";
 import Footer from "./components/Footer";
 
 import { login, logout } from "./services/authService"; // 用你的實際路徑
+import Favorites from "./pages/Favorites";
 
 function App() {
   // 登入狀態
@@ -71,6 +72,7 @@ function App() {
           <Route path="/cars" element={<CarsList />} />
           {/* 買車路由 */}
           <Route path="/cars/:id" element={<CarDetails />} />
+          <Route path="/favorites" element={<Favorites />} />
           {/* 刊登車輛路由 */}
           <Route path="/upload" element={<UploadPage />} />
           {/* 登入路由 */}

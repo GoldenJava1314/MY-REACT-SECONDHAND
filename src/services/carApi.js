@@ -82,4 +82,35 @@ export const getCarById = async (id) => {
   return res.json();
 };
 
+// 查詢單一車輛
+export async function getCarById(id) {
+  const res = await fetch(`${API_BASE_URL}/${id}`);
+  return res.json();
+}
+
+// 切換收藏（按一次 → 收藏 / 再按 → 取消）
+export async function toggleFavorite(carId) {
+  const res = await fetch(`${API_BASE_URL}/${carId}/favorite`, {
+    method: "POST",
+    credentials: "include", // 讓後端能抓 session 內的 user
+  });
+  return res.json();
+}
+
+// 查詢是否收藏
+export async function checkFavorite(carId) {
+  const res = await fetch(`${API_BASE_URL}/${carId}/favorite/check`, {
+    credentials: "include",
+  });
+  return res.json(); // 回傳 true/false
+}
+
+// 取得我的收藏清單
+export async function getMyFavorites() {
+  const res = await fetch(`${API_BASE_URL}/favorites/list`, {
+    credentials: "include",
+  });
+  return res.json();
+}
+
 export default { getCars, uploadCar, uploadCarImages, getCarById };
