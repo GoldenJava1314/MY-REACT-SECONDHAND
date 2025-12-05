@@ -1,92 +1,85 @@
-import { useState, useEffect } from "react";
-import CarCardV3 from "../components/CarCardV2";
-import "../styles/global.css";
-import { getCars, deleteCar } from "../services/carApi";
+import { useEffect, useState } from "react";
+import CarCardV2 from "../components/CarCardV2";
+import { getCars, getMyFavorites, addFavorite, removeFavorite } from "../services/carApi";
 
-function CarsList() {
+export default function CarsList() {
   const [cars, setCars] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [favorites, setFavorites] = useState(() => {
-    return JSON.parse(localStorage.getItem("favoriteCars") || "[]");
-  });
+  const [favorites, setFavorites] = useState([]);
+  const userId = sessionStorage.getItem("LOGIN_USER_ID");
 
-  const fetchCars = async () => {
+  // -----------------------------
+  // 載入車輛
+  // -----------------------------
+  async function loadCars() {
     try {
-      const data = await getCars();
-      setCars(data);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
+      const res = await getCars();
+      setCars(res.data);
+    } catch (err) {
+      console.error("取得車輛失敗", err);
     }
-  };
+  }
+
+  // -----------------------------
+  // 載入我的收藏
+  // -----------------------------
+  async function loadFavorites() {
+    try {
+      const res = await getMyFavorites();
+      setFavorites(res.data.map(car => car.id));
+    } catch (err) {
+      console.error("取得收藏失敗", err);
+    }
+  }
 
   useEffect(() => {
-    fetchCars();
+    loadCars();
+    loadFavorites();
   }, []);
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("確定要刪除這台車嗎？")) return;
+  // -----------------------------
+  // 切換收藏
+  // -----------------------------
+  async function toggleFavorite(carId) {
+  if (!userId) return alert("請先登入");
 
-    try {
-      await deleteCar(id);
-      setCars(cars.filter(c => c.id !== id));
-      alert("刪除成功");
-    } catch (e) {
-      alert("刪除失敗：" + e.message);
-      if (e.message.includes("未登入")) {
-        window.location.href = "/login";
-      }
-    }
-  };
-
-  const toggleFavorite = (car) => {
-    let updated = [];
-    if (favorites.some(f => f.id === car.id)) {
-      updated = favorites.filter(f => f.id !== car.id);
+  try {
+    let res;
+    if (favorites.includes(carId)) {
+      res = await removeFavorite(carId);
     } else {
-      updated = [...favorites, car];
+      res = await addFavorite(carId);
     }
-    setFavorites(updated);
-    localStorage.setItem("favoriteCars", JSON.stringify(updated));
-  };
 
-  if (loading) return <div>載入中...</div>;
+    // 後端回傳最新收藏 ID 列表
+    setFavorites(res.data);
+  } catch (err) {
+    console.error("更新收藏失敗", err);
+  }
+}
 
   return (
     <div className="page-section">
       <h2 className="section-title">最新車輛</h2>
-      {cars.length === 0 ? (
-        <p>目前沒有車輛資料</p>
-      ) : (
-        cars.map(c => (
-          <div key={c.id} style={{ position: "relative", marginBottom: "20px" }}>
-            <CarCardV3 car={c} />
-            <div style={{ position: "absolute", top: 10, right: 10, display: "flex", gap: "5px" }}>
-              <button
-                onClick={() => handleDelete(c.id)}
-                style={{ backgroundColor: "red", color: "white", border: "none", padding: "4px 8px", cursor: "pointer" }}
-              >
-                刪除
-              </button>
-              <button
-                onClick={() => toggleFavorite(c)}
-                style={{
-                  backgroundColor: favorites.some(f => f.id === c.id) ? "#007bff" : "#ccc",
-                  color: "white",
-                  border: "none",
-                  padding: "4px 8px",
-                  cursor: "pointer"
-                }}
-              >
-                {favorites.some(f => f.id === c.id) ? "已關注" : "關注"}
-              </button>
-            </div>
-          </div>
-        ))
-      )}
+
+      {cars.map((car) => (
+        <div key={car.id} style={{ marginBottom: "20px" }}>
+          <CarCardV2 car={car} />
+
+          <button
+            onClick={() => toggleFavorite(car.id)}
+            style={{
+              background: favorites.includes(car.id) ? "orange" : "gray",
+              color: "white",
+              padding: "6px 12px",
+              border: "none",
+              borderRadius: "6px",
+              marginTop: "10px",
+            }}
+          >
+            {favorites.includes(car.id) ? "★ 已關注" : "☆ 關注"}
+          </button>
+        </div>
+      ))}
     </div>
   );
 }
-
-export default CarsList;

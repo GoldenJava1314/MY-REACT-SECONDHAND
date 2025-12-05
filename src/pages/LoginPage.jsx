@@ -6,28 +6,30 @@ import "../styles/auth.css";
 function LoginPage({ onLoginSuccess }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate(); // ← 用來導向頁面
+  const navigate = useNavigate();
 
-  const handleLogin = async () => {
-     // ✅ 新增：前端驗證
-  if (!username.trim() || !password.trim()) {
-    alert("請輸入帳號和密碼");
-    return;
-  }
+  async function handleLogin() {
+    if (!username.trim() || !password.trim()) {
+      alert("請輸入帳號和密碼");
+      return;
+    }
+
     try {
       const result = await login(username.trim(), password);
-      //const result = await login(username, password);
+
       alert("登入成功！");
       console.log("登入成功：", result);
-      onLoginSuccess();
-      navigate("/");         // 導向首頁
+
+      // ★★ 登入成功就把 userId 存起來！
+      sessionStorage.setItem("LOGIN_USER_ID", result.userId);
+
+      onLoginSuccess(); // 通知 App.jsx
+      navigate("/");
     } catch (err) {
       alert("登入失敗：" + err.message);
       console.error(err);
     }
-
-    
-  };
+  }
 
   return (
     <div className="auth-container">

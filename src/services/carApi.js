@@ -1,20 +1,17 @@
-const API_BASE_URL = "http://localhost:8080";
+import axios from "axios";
+const API_BASE_URL = "http://localhost:8080/api/cars";
 
+// -----------------------------
 // 取得所有車輛
-export const getCars = async () => {
-  const res = await fetch(`${API_BASE_URL}/api/cars`, {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-  });
-  if (!res.ok) throw new Error("無法取得車輛資料");
-  return res.json();
-};
+// -----------------------------
+export async function getCars() {
+  return axios.get(`${API_BASE_URL}`, { withCredentials: true });
+}
 
-// 建立車輛（只上傳文字資料）
+// -----------------------------
+// 建立車輛（純文字）
+// -----------------------------
 export async function uploadCar(carData) {
-
-  // ★ 印出即將送出的 JSON
   console.log("送出的 car JSON =", carData);
 
   const res = await fetch(`${API_BASE_URL}/api/cars`, {
@@ -25,92 +22,99 @@ export async function uploadCar(carData) {
   });
 
   const data = await res.json().catch(() => ({}));
-
-  if (!res.ok) {
-    throw new Error(data.message || "上傳失敗");
-  }
-
+  if (!res.ok) throw new Error(data.message || "上傳失敗");
   return data;
 }
 
+// -----------------------------
 // 上傳多張圖片
+// -----------------------------
 export async function uploadCarImages(carId, files) {
   const formData = new FormData();
   for (let f of files) {
-      formData.append("images", f); // ✅ 這裡要跟後端 @RequestParam("images") 一樣
+    formData.append("images", f);
   }
 
-  const res = await fetch(`${API_BASE_URL}/api/cars/${carId}/images`, {
+  const res = await fetch(`${API_BASE_URL}/${carId}/images`, {
     method: "POST",
     credentials: "include",
     body: formData,
   });
 
   const data = await res.json().catch(() => ({}));
-if (!res.ok) {
-  throw new Error(data.message || "圖片上傳失敗");
+  if (!res.ok) throw new Error(data.message || "圖片上傳失敗");
+
+  console.log("total size =", [...files].reduce((s, f) => s + f.size, 0));
+  return data;
 }
 
-console.log("total size =", [...files].reduce((s, f) => s + f.size, 0));
-return data;
-}
-
+// -----------------------------
+// 刪除車輛
+// -----------------------------
 export async function deleteCar(id) {
-  const res = await fetch(`${API_BASE_URL}/api/cars/${id}`, {
+  const res = await fetch(`${API_BASE_URL}/${id}`, {
     method: "DELETE",
     credentials: "include",
   });
 
   const data = await res.json().catch(() => ({}));
-
-  if (!res.ok) {
-    throw new Error(data.message || "刪除失敗");
-  }
-
+  if (!res.ok) throw new Error(data.message || "刪除失敗");
   return data;
 }
 
-
-// 取得單一車輛
-export const getCarById = async (id) => {
-  const res = await fetch(`${API_BASE_URL}/api/cars/${id}`, {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-  });
-  if (!res.ok) throw new Error("無法取得車輛");
-  return res.json();
-};
-
-// 查詢單一車輛
+// -----------------------------
+// 取得單一車輛（唯一的版本）
+// -----------------------------
 export async function getCarById(id) {
-  const res = await fetch(`${API_BASE_URL}/${id}`);
+  const res = await fetch(`${API_BASE_URL}/${id}`, { credentials: "include" });
   return res.json();
 }
 
-// 切換收藏（按一次 → 收藏 / 再按 → 取消）
-export async function toggleFavorite(carId) {
-  const res = await fetch(`${API_BASE_URL}/${carId}/favorite`, {
-    method: "POST",
-    credentials: "include", // 讓後端能抓 session 內的 user
-  });
-  return res.json();
-}
-
-// 查詢是否收藏
+// -----------------------------
+// 🔧 查詢是否收藏
+// -----------------------------
 export async function checkFavorite(carId) {
-  const res = await fetch(`${API_BASE_URL}/${carId}/favorite/check`, {
-    credentials: "include",
-  });
-  return res.json(); // 回傳 true/false
-}
-
-// 取得我的收藏清單
-export async function getMyFavorites() {
-  const res = await fetch(`${API_BASE_URL}/favorites/list`, {
+  const res = await fetch(`${API_BASE_URL}/favorite/check/${carId}`, {
     credentials: "include",
   });
   return res.json();
 }
 
-export default { getCars, uploadCar, uploadCarImages, getCarById };
+// -----------------------------
+// 🔧 取得我的收藏清單
+// -----------------------------
+export async function getMyFavorites() {
+  return axios.get(`${API_BASE_URL}/favorite/list`, { withCredentials: true });
+}
+
+// ⭐加入收藏
+export async function addFavorite(carId) {
+  return axios.post(`${API_BASE_URL}/favorite/${carId}`, null, { withCredentials: true });
+}
+
+// ⭐移除收藏
+export async function removeFavorite(carId) {
+  return axios.delete(`${API_BASE_URL}/favorite/${carId}`, { withCredentials: true });
+}
+
+export async function loadCars() {
+  try {
+    const res = await getCars(); // 從 carApi.js import
+    setCars(res.data); // 設定狀態
+  } catch (err) {
+    console.error("取得車輛失敗", err);
+  }
+}
+
+
+export default {
+  getCars,
+  uploadCar,
+  uploadCarImages,
+  deleteCar,
+  getCarById,
+  checkFavorite,
+  getMyFavorites,
+  addFavorite,
+  removeFavorite,
+};

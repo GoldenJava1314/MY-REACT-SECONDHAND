@@ -49,23 +49,27 @@ export const register = async (username, password) => {
  * @returns {Promise<Object>} 包含登入結果的 API 回應
  */
 export const login = async (username, password) => {
-  const response = await fetch(`${API_BASE_URL}/api/user/login`, {
+  const res = await fetch(`${API_BASE_URL}/api/user/login`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include", // ← 非常重要：讓瀏覽器接收並回傳 JSESSIONID
     body: JSON.stringify({ username, password }),
   });
 
-  
-  if (!response.ok) {
-    const text = await response.text(); 
-    console.log("後端錯誤內容：", text);
-    throw new Error("登入失敗");
+  // 先嘗試解析 JSON（後端回傳 ApiResponse 形式）
+  const json = await res.json().catch(() => ({}));
+
+  // 若 HTTP 本身失敗或後端回傳 status 非 200，拋錯
+  if (!res.ok || json.status !== 200) {
+    // 後端可能會回傳 message 字段
+    throw new Error(json.message || "登入失敗");
   }
 
-  return response.json();
+  const user = json.data; // UserResponseDTO（假設有 id）
+  // 前端記錄 user id（方便用於顯示 / local logic），這**不會**建立後端 session
+  sessionStorage.setItem("LOGIN_USER_ID", user.id);
+
+  return user; // 回傳 user 供前端使用
 };
 
 /**

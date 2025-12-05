@@ -11,7 +11,7 @@ function Navbar({ isLoggedIn, onLogout }) {
           {isLoggedIn ? (
             <>
               <li><Link to="/cars">二手車平台</Link></li>
-              <li><Link to="/cars/:id">買車比拚</Link></li>
+              <li><Link to="/favorites">買車收藏</Link></li>
               <li><Link to="/upload">刊登車輛</Link></li>
               <li>
                 <button className="navbar-button" onClick={onLogout}>
