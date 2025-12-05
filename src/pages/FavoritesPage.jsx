@@ -21,7 +21,7 @@ export default function FavoritesPage() {
             ...car,
             images: Array.isArray(car.images) && car.images.length > 0
               ? car.images
-              : [imgUrl], 
+              : [imgUrl],
           };
         });
 
@@ -35,12 +35,9 @@ export default function FavoritesPage() {
     loadFavorites();
   }, []);
 
-  // ⭐ 新增：刪除收藏功能
   async function handleRemoveFavorite(carId) {
     try {
       await removeFavorite(carId);
-
-      // ⭐ 前端即時移除畫面上的車輛
       setCars(prev => prev.filter(car => car.id !== carId));
     } catch (err) {
       console.error("刪除收藏失敗", err);
@@ -58,25 +55,54 @@ export default function FavoritesPage() {
         <p>你尚未關注任何車輛</p>
       ) : (
         cars.map(car => (
-          <div key={car.id} style={{ marginBottom: "30px" }}>
-            {/* 車卡 */}
-            <CarCardV2 car={car} />
+          <div
+            key={car.id}
+            style={{ marginBottom: "40px", position: "relative" }}
+          >
+            {/* 🌟 浮動按鈕區塊包住 CarCardV2 */}
+            <div style={{ position: "relative" }}>
+              
+              {/* ⭐ 左上角：聯絡賣家 */}
+              <button
+                onClick={() => alert("聯絡賣家功能尚未實作")}
+                style={{
+                  position: "absolute",
+                  top: "10px",
+                  left: "10px",
+                  zIndex: 10,
+                  background: "#0d6efd",
+                  color: "white",
+                  border: "none",
+                  padding: "6px 12px",
+                  borderRadius: "6px",
+                  cursor: "pointer"
+                }}
+              >
+                聯絡賣家
+              </button>
 
-            {/* ⭐ 刪除收藏按鈕 */}
-            <button
-              onClick={() => handleRemoveFavorite(car.id)}
-              style={{
-                marginTop: "10px",
-                padding: "8px 12px",
-                backgroundColor: "#ff5b5b",
-                color: "white",
-                border: "none",
-                borderRadius: "6px",
-                cursor: "pointer"
-              }}
-            >
-              ❌ 移除收藏
-            </button>
+              {/* ⭐ 右上角：移除收藏 */}
+              <button
+                onClick={() => handleRemoveFavorite(car.id)}
+                style={{
+                  position: "absolute",
+                  top: "10px",
+                  right: "10px",
+                  zIndex: 10,
+                  background: "#dc3545",
+                  color: "white",
+                  border: "none",
+                  padding: "6px 12px",
+                  borderRadius: "6px",
+                  cursor: "pointer"
+                }}
+              >
+                移除收藏
+              </button>
+
+              {/* 車卡本體 */}
+              <CarCardV2 car={car} />
+            </div>
           </div>
         ))
       )}
