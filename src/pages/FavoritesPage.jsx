@@ -64,7 +64,15 @@ export default function FavoritesPage() {
               
               {/* ⭐ 左上角：聯絡賣家 */}
               <button
-                onClick={() => alert("聯絡賣家功能尚未實作")}
+                 onClick={() => {
+                if (car.sellerLineId) {
+                  // Line 聯絡格式：https://line.me/ti/p/<LINE_ID>
+                  const url = `https://line.me/ti/p/${car.sellerLineId}`;
+                  window.open(url, "_blank");
+                } else {
+                  alert("賣家未提供 Line 聯絡方式");
+                }
+                 }}
                 style={{
                   position: "absolute",
                   top: "10px",

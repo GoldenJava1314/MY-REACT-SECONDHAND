@@ -9,96 +9,103 @@ function UploadPage() {
   const [year, setYear] = useState("");
   const [mileage, setMileage] = useState("");
   const [price, setPrice] = useState("");
+  const [sellerLineId, setSellerLineId] = useState("");   // ← 新增
   const [files, setFiles] = useState([]);
 
-const handleFileChange = (e) => {
-  const selected = Array.from(e.target.files).filter(f => f.size > 0);
+  const handleFileChange = (e) => {
+    const selected = Array.from(e.target.files).filter(f => f.size > 0);
 
-  const newFiles = [...files, ...selected];
+    const newFiles = [...files, ...selected];
 
-  if (newFiles.length > 20) {
-    alert("最多只能上傳20張圖片");
-    return;
-  }
-
-  setFiles(newFiles);
-};
-
+    if (newFiles.length > 20) {
+      alert("最多只能上傳20張圖片");
+      return;
+    }
+    setFiles(newFiles);
+  };
 
   const handleSubmit = async (e) => {
-
-    //console.log("送出的 car JSON=", carData); // ★ 放這裡！
-
     e.preventDefault();
 
-   /*  const carData = {
-    brand,
-    model,
-    year: Number(year),
-    mileage: Number(mileage),
-    price: Number(price),
-  };  */
-    
-
     try {
-      // 1. 建立 car（後端回傳包含 id）
-
-      console.log("準備上傳的檔案：", files);
-      const carData = 
-      { brand, 
+      const carData = { 
+        brand, 
         model, 
         year: parseInt(year), 
         mileage: parseInt(mileage), 
-        price: parseFloat(price) 
+        price: parseFloat(price),
+        sellerLineId    // ★ 新增欄位送到後端
       };
+
       const created = await uploadCar(carData);
 
-      // 2. 若有檔案，呼叫 uploadCarImages
       if (files.length > 0) {
         await uploadCarImages(created.id, files);
       }
 
       alert("刊登成功！");
-      // reset
-      setBrand(""); setModel(""); setYear(""); setMileage(""); setPrice(""); setFiles([]);
-
-     console.log("上傳檔案數量:", files.length, files);
+      setBrand(""); setModel(""); setYear(""); setMileage(""); setPrice("");
+      setSellerLineId("");  // 清空 Line ID
+      setFiles([]);
 
     } catch (err) {
-  console.error("錯誤：", err);
-  alert(err.message);   // 會顯示「未登入」「圖片上傳失敗」等明確訊息
-}
+      console.error("錯誤：", err);
+      alert(err.message);
+    }
   };
 
   return (
     <div className="upload-card">
       <h2 className="upload-title">刊登二手車</h2>
       <form className="upload-form" onSubmit={handleSubmit}>
-        <label>廠牌<input value={brand} onChange={(e)=>setBrand(e.target.value)} required/></label>
-        <label>車款<input value={model} onChange={(e)=>setModel(e.target.value)} required/></label>
-        
-     <div className="upload-form">
-       <label>年份<input type="number" value={year} onChange={(e)=>setYear(e.target.value)} required/></label>
-     </div>
 
-     <div className="upload-form">
-       <label>里程<input type="number" value={mileage} onChange={(e)=>setMileage(e.target.value)} required/></label>
-       <label>價格<input type="number" value={price} onChange={(e)=>setPrice(e.target.value)} required/></label>
-     </div>
+  <div className="form-row">
+    <label>廠牌</label>
+    <input value={brand} onChange={(e)=>setBrand(e.target.value)} required/>
+  </div>
 
+  <div className="form-row">
+    <label>車款</label>
+    <input value={model} onChange={(e)=>setModel(e.target.value)} required/>
+  </div>
 
-      <label className="file-label">
-        <input
-          type="file"
-          accept="image/*"
-          multiple
-          onChange={handleFileChange} // ✅ 這裡換成 handleFileChange
-        />
-      </label>
-        <button type="submit" className="submit-btn">刊登車輛</button>
-      </form>
+  <div className="form-row">
+    <label>年份</label>
+    <input type="number" value={year} onChange={(e)=>setYear(e.target.value)} required/>
+  </div>
 
-      
+  <div className="form-row">
+    <label>里程</label>
+    <input type="number" value={mileage} onChange={(e)=>setMileage(e.target.value)} required/>
+  </div>
+
+  <div className="form-row">
+    <label>價格</label>
+    <input type="number" value={price} onChange={(e)=>setPrice(e.target.value)} required/>
+  </div>
+
+  <div className="form-row">
+    <label>Line ID</label>
+    <input
+      type="text"
+      value={sellerLineId}
+      onChange={(e) => setSellerLineId(e.target.value)}
+      placeholder="買家可用此聯絡你"
+    />
+  </div>
+
+  <div className="form-row">
+    <label>車輛照片</label>
+    <input
+      type="file"
+      accept="image/*"
+      multiple
+      onChange={handleFileChange}
+    />
+  </div>
+
+  <button type="submit" className="submit-btn">刊登車輛</button>
+</form>
     </div>
   );
 }

@@ -14,7 +14,7 @@ export async function getCars() {
 export async function uploadCar(carData) {
   console.log("送出的 car JSON =", carData);
 
-  const res = await fetch(`${API_BASE_URL}/api/cars`, {
+  const res = await fetch(`${API_BASE_URL}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
