@@ -17,6 +17,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import { login, logout } from "./services/authService"; // 用你的實際路徑
 import FavoritePage from "./pages/FavoritesPage";
+import MyCars from "./pages/MyCars";
 
 // 頁尾相關模組
 import Footer from "./components/Footer";
@@ -80,6 +81,8 @@ function App() {
           <Route path="/login" element={<LoginPage onLoginSuccess={() => setIsLoggedIn(true)} />} />
           {/* 註冊路由 */}
           <Route path="/register" element={<RegisterPage />} />
+          {/* 我的刊登路由 */}
+          <Route path="/my-cars" element={<MyCars />} />
         </Routes>
       </div>
       {/* 頁尾-位於最下方 */}

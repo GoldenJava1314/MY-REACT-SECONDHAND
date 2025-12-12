@@ -1,5 +1,11 @@
 import axios from "axios";
+
 const API_BASE_URL = "http://localhost:8080/api/cars";
+
+const api = axios.create({
+  baseURL: "http://localhost:8080/api",
+  withCredentials: true,
+});
 
 // -----------------------------
 // 取得所有車輛
@@ -49,20 +55,6 @@ export async function uploadCarImages(carId, files) {
 }
 
 // -----------------------------
-// 刪除車輛
-// -----------------------------
-export async function deleteCar(id) {
-  const res = await fetch(`${API_BASE_URL}/${id}`, {
-    method: "DELETE",
-    credentials: "include",
-  });
-
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data.message || "刪除失敗");
-  return data;
-}
-
-// -----------------------------
 // 取得單一車輛（唯一的版本）
 // -----------------------------
 export async function getCarById(id) {
@@ -106,6 +98,30 @@ export async function loadCars() {
   }
 }
 
+// 取得我的車輛
+// -----------------------------
+export async function getMyCars() {
+  const res = await api.get("/cars/my-cars");
+  return res.data?.data ?? [];
+}
+
+// 還原
+export async function restoreCar(carId) {
+  const res = await api.post(`/cars/restore/${carId}`);
+  return res.data;
+}
+
+// 永久刪除
+export async function hardDeleteCar(carId) {
+  const res = await api.delete(`/cars/hard-delete/${carId}`);
+  return res.data;
+}
+
+// 刪除（軟刪除）
+export async function deleteCar(carId) {
+  const res = await api.delete(`/cars/${carId}`);
+  return res.data;
+}
 
 export default {
   getCars,
@@ -117,4 +133,7 @@ export default {
   getMyFavorites,
   addFavorite,
   removeFavorite,
+  getMyCars,
+  restoreCar,
+  hardDeleteCar
 };

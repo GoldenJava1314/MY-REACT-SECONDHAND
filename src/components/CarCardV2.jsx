@@ -62,7 +62,7 @@ function CarCardV2({ car }) {
         <div className="car-title">{car.brand} {car.model}</div>
         <div>年份: {car.year}</div>
         <div>里程: {car.mileage} km</div>
-        <div>價格: ${car.price}</div>
+        <div>價格: ${car.price}萬</div>
       </div>
 
       {/* Modal */}

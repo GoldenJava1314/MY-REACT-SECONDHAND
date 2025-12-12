@@ -28,7 +28,9 @@ function UploadPage() {
     e.preventDefault();
 
     try {
+      const userId = localStorage.getItem("LOGIN_USER_ID");
       const carData = { 
+        userId,
         brand, 
         model, 
         year: parseInt(year), 
@@ -80,7 +82,7 @@ function UploadPage() {
   </div>
 
   <div className="form-row">
-    <label>價格</label>
+    <label>價格(萬)</label>
     <input type="number" value={price} onChange={(e)=>setPrice(e.target.value)} required/>
   </div>
 

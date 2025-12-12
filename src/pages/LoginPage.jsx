@@ -9,27 +9,31 @@ function LoginPage({ onLoginSuccess }) {
   const navigate = useNavigate();
 
   async function handleLogin() {
-    if (!username.trim() || !password.trim()) {
-      alert("請輸入帳號和密碼");
-      return;
-    }
-
-    try {
-      const result = await login(username.trim(), password);
-
-      alert("登入成功！");
-      console.log("登入成功：", result);
-
-      // ★★ 登入成功就把 userId 存起來！
-      sessionStorage.setItem("LOGIN_USER_ID", result.userId);
-
-      onLoginSuccess(); // 通知 App.jsx
-      navigate("/");
-    } catch (err) {
-      alert("登入失敗：" + err.message);
-      console.error(err);
-    }
+  if (!username.trim() || !password.trim()) {
+    alert("請輸入帳號和密碼");
+    return;
   }
+
+  try {
+    const result = await login(username.trim(), password);
+
+    console.log("登入成功：", result);
+
+    // ★ 正確存登入資訊 ★
+    sessionStorage.setItem("LOGIN_USER_ID", result.id);
+    sessionStorage.setItem("LOGIN_USER_IS_ADMIN", result.isAdmin);
+
+    localStorage.setItem("LOGIN_USER_ID", result.id);
+
+    alert("登入成功！");
+    onLoginSuccess();
+    navigate("/");
+
+  } catch (err) {
+    alert("登入失敗：" + err.message);
+    console.error(err);
+  }
+}
 
   return (
     <div className="auth-container">

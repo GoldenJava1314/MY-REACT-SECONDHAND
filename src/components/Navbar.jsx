@@ -13,6 +13,8 @@ function Navbar({ isLoggedIn, onLogout }) {
               <li><Link to="/cars">二手車平台</Link></li>
               <li><Link to="/favorites">買車收藏</Link></li>
               <li><Link to="/upload">刊登車輛</Link></li>
+              <li><Link to="/my-cars">我的刊登</Link></li>
+
               <li>
                 <button className="navbar-button" onClick={onLogout}>
                   登出
