@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { getMyFavorites, removeFavorite } from "../services/carApi";
 import CarCardV2 from "../components/CarCardV2";
 
 export default function FavoritesPage() {
   const [cars, setCars] = useState([]);
+  const location = useLocation();
   const userId = sessionStorage.getItem("LOGIN_USER_ID");
 
   useEffect(() => {
@@ -33,7 +35,7 @@ export default function FavoritesPage() {
     }
 
     loadFavorites();
-  }, []);
+  }, [location.pathname]);
 
   async function handleRemoveFavorite(carId) {
     try {

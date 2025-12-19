@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import CarCardV2 from "../components/CarCardV2";
 import { 
   getCars, 
@@ -9,10 +10,11 @@ import {
 } from "../services/carApi";
 
 export default function CarsList() {
+  const location = useLocation();
   const [cars, setCars] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const userId = sessionStorage.getItem("LOGIN_USER_ID");
-
+  
   // -----------------------------
   // 載入車輛
   // -----------------------------
@@ -38,9 +40,10 @@ export default function CarsList() {
   }
 
   useEffect(() => {
+    console.log("CarsList useEffect 執行");
     loadCars();
     loadFavorites();
-  }, []);
+  }, [location.pathname]);
 
   // -----------------------------
   // 切換收藏
@@ -72,8 +75,8 @@ export default function CarsList() {
     try {
       await deleteCar(carId);
 
-      // 更新車輛列表（前端同步更新 UI）
-      setCars((prevCars) => prevCars.filter((car) => car.id !== carId));
+      // ✅ 重新跟後端要資料
+      await loadCars(); //「只有在這裡刪」才會跑
 
       // 如果該車被收藏，也從收藏中移除
       setFavorites((prevFavorites) =>

@@ -9,7 +9,7 @@ import {
 
 export default function CarDetails() {
   const { id } = useParams();
-  const userId = sessionStorage.getItem("LOGIN_USER_ID"); // 👈 你登入後要存這個
+  const userId = sessionStorage.getItem("LOGIN_USER_ID"); // 登入後要存這個
   const [car, setCar] = useState(null);
   const [isFavorite, setIsFavorite] = useState(false);
 
