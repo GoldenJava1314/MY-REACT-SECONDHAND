@@ -6,9 +6,9 @@ const CarRefreshContext = createContext();
 export function CarRefreshProvider({ children }) {
   const [refreshKey, setRefreshKey] = useState(0);
 
-  function triggerRefresh() {
-    setRefreshKey((prev) => prev + 1);
-  }
+  const triggerRefresh = () => {
+    setRefreshKey(prev => prev + 1);
+  };
 
   return (
     <CarRefreshContext.Provider value={{ refreshKey, triggerRefresh }}>

@@ -8,6 +8,8 @@ import {
   removeFavorite,
   deleteCar  // ★ 加入刪除 API
 } from "../services/carApi";
+import { useCarRefresh } from "../context/CarRefreshContext";
+
 
 export default function CarsList() {
   const location = useLocation();
@@ -39,11 +41,11 @@ export default function CarsList() {
     }
   }
 
+  const { refreshKey } = useCarRefresh();
   useEffect(() => {
-    console.log("CarsList useEffect 執行");
     loadCars();
     loadFavorites();
-  }, [location.pathname]);
+  }, [refreshKey]);
 
   // -----------------------------
   // 切換收藏

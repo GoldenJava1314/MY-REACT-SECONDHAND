@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { getMyFavorites, removeFavorite } from "../services/carApi";
 import CarCardV2 from "../components/CarCardV2";
+import { useCarRefresh } from "../context/CarRefreshContext";
 
 export default function FavoritesPage() {
   const [cars, setCars] = useState([]);
   const location = useLocation();
   const userId = sessionStorage.getItem("LOGIN_USER_ID");
 
+  const { refreshKey } = useCarRefresh();
   useEffect(() => {
     async function loadFavorites() {
       try {
@@ -35,7 +37,7 @@ export default function FavoritesPage() {
     }
 
     loadFavorites();
-  }, [location.pathname]);
+  }, [refreshKey]);
 
   async function handleRemoveFavorite(carId) {
     try {

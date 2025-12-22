@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getMyCars, restoreCar, deleteCar, hardDeleteCar } from "../services/carApi";
 import "../pages/mycars.css"; // CSS 改動包含圖片欄位
+import { useCarRefresh } from "../context/CarRefreshContext";
 
 export default function MyCars() {
   const [cars, setCars] = useState([]);
@@ -20,10 +21,12 @@ export default function MyCars() {
     setCars(prev => prev.map(car => car.id === id ? { ...car, deleted: false } : car));
   }
 
+  const { triggerRefresh } = useCarRefresh();
   async function handleDelete(id) {
     if (!window.confirm("確定要刪除嗎？")) return;
     await deleteCar(id);
     setCars(prev => prev.map(car => car.id === id ? { ...car, deleted: true } : car));
+    triggerRefresh();
   }
 
   async function handleHardDelete(id) {
