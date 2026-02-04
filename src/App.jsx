@@ -15,7 +15,7 @@ import CarDetails from "./pages/CarDetails";
 import UploadPage from "./pages/UploadPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import { login, logout } from "./services/authService"; // 用你的實際路徑
+import { login, logout } from "./services/authService"; 
 import FavoritePage from "./pages/FavoritesPage";
 import MyCars from "./pages/MyCars";
 
