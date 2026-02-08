@@ -52,7 +52,7 @@ export const login = async (username, password) => {
   const res = await fetch(`${API_BASE_URL}/api/user/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    credentials: "include", // ← 非常重要：讓瀏覽器接收並回傳 JSESSIONID
+    credentials: "include", // ← 非常重要：讓瀏覽器接收並回傳 JSESSIONID 
     body: JSON.stringify({ username, password }),
   });
 
@@ -65,8 +65,8 @@ export const login = async (username, password) => {
     throw new Error(json.message || "登入失敗");
   }
 
-  const user = json.data; // UserResponseDTO（假設有 id）
-  // 前端記錄 user id（方便用於顯示 / local logic），這**不會**建立後端 session
+  const user = json.data; // UserResponseDTO
+  // 前端記錄 user id（方便用於顯示 / local logic），這"不會"建立後端 session
   sessionStorage.setItem("LOGIN_USER_ID", user.id);
 
   return user; // 回傳 user 供前端使用
