@@ -7,10 +7,13 @@ import { useCarRefresh } from "../context/CarRefreshContext";
 export default function FavoritesPage() {
   const [cars, setCars] = useState([]);
   const location = useLocation();
-  const userId = sessionStorage.getItem("LOGIN_USER_ID");
+  const token = localStorage.getItem("ACCESS_TOKEN");
 
-  const { refreshKey } = useCarRefresh();
+  const { refreshKey, triggerRefresh }  = useCarRefresh();
   useEffect(() => {
+
+    if (!token) return;
+
     async function loadFavorites() {
       try {
         const res = await getMyFavorites();
@@ -19,7 +22,7 @@ export default function FavoritesPage() {
         const favsArray = Array.isArray(res.data) ? res.data : [];
 
         const normalized = favsArray.map(car => {
-          const imgUrl = `http://localhost:8080/api/cars/${car.id}/images/0`;
+          const imgUrl = `http://localhost:8080${car.images[0]}`;
 
           return {
             ...car,
@@ -37,12 +40,13 @@ export default function FavoritesPage() {
     }
 
     loadFavorites();
-  }, [refreshKey]);
+  }, [refreshKey,token]);
 
   async function handleRemoveFavorite(carId) {
     try {
       await removeFavorite(carId);
-      setCars(prev => prev.filter(car => car.id !== carId));
+      triggerRefresh(); // 通知所有頁面
+      setCars(prev => prev.filter(car => car.id !== carId));// 立即更新畫面
     } catch (err) {
       console.error("刪除收藏失敗", err);
       alert("刪除收藏失敗！");
@@ -53,7 +57,7 @@ export default function FavoritesPage() {
     <div style={{ padding: "20px" }}>
       <h1>我的關注</h1>
 
-      {!userId ? (
+      {!token ? (
         <p>請先登入才能查看你關注的車輛。</p>
       ) : cars.length === 0 ? (
         <p>你尚未關注任何車輛</p>

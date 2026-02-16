@@ -5,7 +5,7 @@ import { useCarRefresh } from "../context/CarRefreshContext";
 
 export default function MyCars() {
   const [cars, setCars] = useState([]);
-  const isAdmin = !!sessionStorage.getItem("LOGIN_USER_IS_ADMIN") && sessionStorage.getItem("LOGIN_USER_IS_ADMIN") !== "false";
+  const isAdmin = sessionStorage.getItem("LOGIN_USER_IS_ADMIN") === "true";
 
   async function loadData() {
     try {

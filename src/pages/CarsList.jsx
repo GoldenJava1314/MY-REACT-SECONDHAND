@@ -12,11 +12,16 @@ import { useCarRefresh } from "../context/CarRefreshContext";
 
 
 export default function CarsList() {
-  const location = useLocation();
   const [cars, setCars] = useState([]);
   const [favorites, setFavorites] = useState([]);
-  const userId = sessionStorage.getItem("LOGIN_USER_ID");
-  
+  const token = localStorage.getItem("ACCESS_TOKEN");
+  const { refreshKey, triggerRefresh} = useCarRefresh();
+
+  useEffect(() => {
+    loadCars();
+    loadFavorites();
+  }, [refreshKey]);
+    
   // -----------------------------
   // 載入車輛
   // -----------------------------
@@ -32,41 +37,36 @@ export default function CarsList() {
   // -----------------------------
   // 載入收藏
   // -----------------------------
-  async function loadFavorites() {
-    try {
-      const res = await getMyFavorites();
-      setFavorites(res.data.map(car => car.id));
-    } catch (err) {
-      console.error("取得收藏失敗", err);
+ async function toggleFavorite(carId) {
+  if (!token) return alert("請先登入");
+
+  try {
+    if (favorites.includes(carId)) {
+      await removeFavorite(carId);
+    } else {
+      await addFavorite(carId);
     }
+
+    triggerRefresh();  // 全頁同步
+
+  } catch (err) {
+    console.error("更新收藏失敗", err);
   }
+}
 
-  const { refreshKey } = useCarRefresh();
-  useEffect(() => {
-    loadCars();
-    loadFavorites();
-  }, [refreshKey]);
+// -----------------------------
+// 載入收藏
+// -----------------------------
+async function loadFavorites() {
+  if (!token) return;
 
-  // -----------------------------
-  // 切換收藏
-  // -----------------------------
-  async function toggleFavorite(carId) {
-    if (!userId) return alert("請先登入");
-
-    try {
-      let res;
-      if (favorites.includes(carId)) {
-        res = await removeFavorite(carId);
-      } else {
-        res = await addFavorite(carId);
-      }
-
-      // 後端回傳最新收藏 ID 列表
-      setFavorites(res.data);
-    } catch (err) {
-      console.error("更新收藏失敗", err);
-    }
+  try {
+    const res = await getMyFavorites();
+    setFavorites(res.data.map(car => car.id));
+  } catch (err) {
+    console.error("取得收藏失敗", err);
   }
+}
 
   // -----------------------------
   // 刪除車輛
@@ -77,10 +77,9 @@ export default function CarsList() {
     try {
       await deleteCar(carId);
 
-      // ✅ 重新跟後端要資料
-      await loadCars(); //「只有在這裡刪」才會跑
+       triggerRefresh(); //全頁同步
 
-      // 如果該車被收藏，也從收藏中移除
+      // 如果該車被收藏，也從收藏中移除，立即更新畫面
       setFavorites((prevFavorites) =>
         prevFavorites.filter((id) => id !== carId)
       );

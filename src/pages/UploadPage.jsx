@@ -28,9 +28,7 @@ function UploadPage() {
     e.preventDefault();
 
     try {
-      const userId = localStorage.getItem("LOGIN_USER_ID");
       const carData = { 
-        userId,
         brand, 
         model, 
         year: parseInt(year), 

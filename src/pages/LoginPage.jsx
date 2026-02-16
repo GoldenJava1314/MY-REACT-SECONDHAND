@@ -8,7 +8,7 @@ function LoginPage({ onLoginSuccess }) {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  async function handleLogin() {
+async function handleLogin() {
   if (!username.trim() || !password.trim()) {
     alert("請輸入帳號和密碼");
     return;
@@ -19,11 +19,11 @@ function LoginPage({ onLoginSuccess }) {
 
     console.log("登入成功：", result);
 
-    // ★ 正確存登入資訊 ★
-    sessionStorage.setItem("LOGIN_USER_ID", result.id);
-    sessionStorage.setItem("LOGIN_USER_IS_ADMIN", result.isAdmin);
+    
+    localStorage.setItem("ACCESS_TOKEN", result.accessToken);
 
-    localStorage.setItem("LOGIN_USER_ID", result.id);
+    sessionStorage.setItem("LOGIN_USER_IS_ADMIN", result.admin ? "true" : "false");
+
 
     alert("登入成功！");
     onLoginSuccess();
