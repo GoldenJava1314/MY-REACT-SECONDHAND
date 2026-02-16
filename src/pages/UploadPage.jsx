@@ -45,7 +45,7 @@ function UploadPage() {
 
       alert("刊登成功！");
       setBrand(""); setModel(""); setYear(""); setMileage(""); setPrice("");
-      setSellerLineId("");  // 清空 Line ID
+      setSellerLineId("");
       setFiles([]);
 
     } catch (err) {
