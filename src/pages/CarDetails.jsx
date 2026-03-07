@@ -31,10 +31,10 @@ export default function CarDetails() {
   setIsFavorite(newStatus); 
 }
 
-useEffect(() => {
-  getCarById(id).then(setCar);
-  checkFavorite(id).then(setIsFavorite);
-}, [id]);
+// useEffect(() => {
+//  getCarById(id).then(setCar);
+// checkFavorite(id).then(setIsFavorite);
+//}, [id]); 
 
   if (!car) return <h2>載入中...</h2>;
 

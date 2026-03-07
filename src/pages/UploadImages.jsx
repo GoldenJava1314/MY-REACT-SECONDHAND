@@ -24,6 +24,12 @@ function UploadImages() {
     console.log("Uploaded:", urls);
   };
 
+   useEffect(() => {
+    return () => {
+      previewImages.forEach(url => URL.revokeObjectURL(url));
+    };
+  }, [previewImages]);
+
   return (
     <div>
       <h1>上傳車輛圖片</h1>

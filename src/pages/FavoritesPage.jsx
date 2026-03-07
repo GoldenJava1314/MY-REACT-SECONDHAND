@@ -22,13 +22,13 @@ export default function FavoritesPage() {
         const favsArray = Array.isArray(res.data) ? res.data : [];
 
         const normalized = favsArray.map(car => {
-          const imgUrl = `http://localhost:8080${car.images[0]}`;
+          const imgUrl = `http://localhost:8080${car.images?.[0]}`
 
           return {
             ...car,
             images: Array.isArray(car.images) && car.images.length > 0
               ? car.images
-              : [imgUrl],
+              : [imgUrl]
           };
         });
 
