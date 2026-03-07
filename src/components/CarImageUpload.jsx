@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function CarImageUpload() {
   const [previewImages, setPreviewImages] = useState([]);
@@ -24,6 +25,12 @@ function CarImageUpload() {
     const urls = await res.json();
     console.log("Uploaded:", urls);
   };
+
+  useEffect(() => {
+    return () => {
+      previewImages.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, [previewImages]);
 
   return (
     <div>
