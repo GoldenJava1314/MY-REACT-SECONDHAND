@@ -15,7 +15,8 @@ function UploadPage() {
   const handleFileChange = (e) => {
     const selected = Array.from(e.target.files).filter(f => f.size > 0);
 
-    const newFiles = [...files, ...selected];
+    //合併舊檔案與新檔案，避免同一個檔案重複
+    const newFiles = Array.from(new Set([...files, ...selected]));
 
     if (newFiles.length > 20) {
       alert("最多只能上傳20張圖片");

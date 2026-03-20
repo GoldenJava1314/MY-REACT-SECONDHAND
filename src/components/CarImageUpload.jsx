@@ -6,6 +6,7 @@ function CarImageUpload() {
   const [selectedFiles, setSelectedFiles] = useState([]);
 
   const handleFileChange = (e) => {
+    previewImages.forEach(URL.revokeObjectURL);
     const files = Array.from(e.target.files);
 
     const previews = files.map((file) => URL.createObjectURL(file));
